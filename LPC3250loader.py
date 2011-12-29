@@ -19,14 +19,57 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-import sys, os, serial, threading
+import sys, os, serial, getopt
 
 loadaddr = 0x00000000
 imgaddr = 0x80000004
 
 serialport = "/dev/ttyUSB0"
-burnerfile = "/home/alex/burner.bin"
-imagefile = "/home/alex/kick.bin"
+burnerfile = None
+imagefile = None
+
+
+def usage():
+    print "%s programfile" % (sys.argv[0])
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "a:i:l:p:hv", ["help", "imgaddress=", "image=", "loadaddress=", "port="])
+except getopt.GetoptError, err:
+    print str(err)
+    usage()
+    sys.exit(2)
+verbose = False
+
+if len(args) != 1:
+    usage()
+    sys.exit()
+
+burnerfile = args[0]
+
+for o, a in opts:
+    if o == "-v":
+        verbose = True
+    elif o in ("-h", "--help"):
+        usage()
+        sys.exit()
+    elif o in ("-i", "--image"):
+        imagefile = a
+    elif o in ("-p", "--port"):
+        serialport = a
+    #TODO addresses
+    else:
+        usage()
+        sys.exit()
+
+print "%s, %s, %s" % (burnerfile, imagefile, serialport)
+
+if not os.path.exists(burnerfile):
+    sys.stderr.write("Couldn't find " + burnerfile + "\n")
+    sys.exit(1)
+
+if imagefile and not os.path.exists(imagefile):
+    sys.stderr.write("Couldn't find " + imagefile + "\n")
+    sys.exit(1)
 
 ser = serial.Serial(serialport, 115200, timeout=300)
 

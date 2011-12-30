@@ -24,9 +24,16 @@ import sys, os, serial, getopt
 verbose = False
 
 def usage():
-    #TODO
-    print "%s programfile" % (sys.argv[0])
-
+   print "Usage: %s [option(s)] programfile" % (sys.argv[0])
+   print """ Simple program loader for LPC3250.
+ The options are:
+  -a --imgaddress   Load address for the image to burn (default 0x80000004)
+  -i --image        Image file to burn
+  -l --loadaddress  Load address for the program (default 0x00000000)
+  -p --port         Serial port to use (default /dev/ttyUSB0)
+  -h --help         Display this information
+  -v                Be verbose
+"""
 
 def serialread(ser):
     global verbose

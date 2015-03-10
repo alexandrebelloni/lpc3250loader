@@ -1,0 +1,5 @@
+LPC3250Loader
+=============
+
+LPC3250Loader is a script to load/burn programs (in particular kickstart and
+S1L) on an LPC3250 platform.
